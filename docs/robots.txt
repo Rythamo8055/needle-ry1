@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rythamo8055.github.io/needle-ry1/sitemap.xml

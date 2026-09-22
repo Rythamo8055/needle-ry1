@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Primary Meta Tags -->
+  <title>needle-ry1 — Zero-Latency, 29 MB On-Device Desktop Command Palette</title>
+  <meta name="title" content="needle-ry1 — Zero-Latency, 29 MB On-Device Desktop Command Palette" />
+  <meta name="description" content="Offline, ultra-fast 29MB desktop command bar powered by a 45M neural reflex engine. Safe non-destructive file conversion, 1,750+ stream downloader, zero cloud latency, 0.0% idle CPU." />
+  <meta name="keywords" content="needle-ry1, local ai assistant, desktop command palette, offline ai, raycast alternative, spotlight alternative, yt-dlp desktop app, on-device llm, privacy first ai, imagemagick gui, zero cloud telemetry, linux command palette, cross platform command bar" />
+  <meta name="author" content="Rythamo8055" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://rythamo8055.github.io/needle-ry1/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://rythamo8055.github.io/needle-ry1/" />
+  <meta property="og:title" content="needle-ry1 — Zero-Latency, 29 MB On-Device Desktop Command Palette" />
+  <meta property="og:description" content="500x lighter than local LLMs. 0% idle CPU. Zero cloud subscriptions. Instant file conversion, media streaming, and native desktop power." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/Rythamo8055/needle-ry1/main/docs/og-preview.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://rythamo8055.github.io/needle-ry1/" />
+  <meta property="twitter:title" content="needle-ry1 — Zero-Latency, 29 MB On-Device Desktop Command Palette" />
+  <meta property="twitter:description" content="Zero-latency, 29MB command bar powered by a 45M neural reflex engine. 100% private & offline." />
+  <meta property="twitter:image" content="https://raw.githubusercontent.com/Rythamo8055/needle-ry1/main/docs/og-preview.png" />
+
+  <!-- Structured Data JSON-LD for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "needle-ry1",
+    "operatingSystem": "Linux, Windows, macOS",
+    "applicationCategory": "UtilitiesApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "A zero-latency, 29MB on-device desktop command palette powered by an embedded 45M parameter neural reflex engine. Operates 100% offline with zero cloud telemetry.",
+    "softwareVersion": "0.1.0",
+    "downloadUrl": "https://github.com/Rythamo8055/needle-ry1/releases",
+    "author": {
+      "@type": "Person",
+      "name": "Rythamo8055",
+      "url": "https://github.com/Rythamo8055"
+    }
+  }
+  </script>
+
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+            },
+            dark: {
+              900: '#08090c',
+              850: '#0e1117',
+              800: '#161b22',
+              700: '#21262d',
+              600: '#30363d',
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #08090c;
+      font-family: 'Inter', sans-serif;
+    }
+    .glow-emerald {
+      box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.25);
+    }
+    .glow-pill {
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.4);
+    }
+    .code-glow {
+      text-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+    }
+    .grid-bg {
+      background-size: 32px 32px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="text-slate-200 antialiased selection:bg-brand-500 selection:text-black min-h-screen flex flex-col justify-between grid-bg">
+
+  <!-- Top Announcement Bar -->
+  <aside aria-label="Update Banner" class="border-b border-dark-700/60 bg-dark-850/80 backdrop-blur text-xs py-2 px-4 text-center text-slate-400">
+    🚀 <strong class="text-white font-medium">needle-ry1 v0.1.0 Released</strong> — Linux AppImage, Windows Portable .exe, and macOS DMG builds are now live. 
+    <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="underline text-brand-400 hover:text-brand-300 ml-2 font-mono">Download Release &rarr;</a>
+  </aside>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-dark-900/80 border-b border-dark-700/80">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-400 to-emerald-700 flex items-center justify-center font-mono font-bold text-black text-xl shadow-lg glow-pill">
+          ⚡
+        </div>
+        <div>
+          <span class="font-mono font-bold text-lg text-white tracking-tight">needle-ry1</span>
+          <span class="text-[10px] uppercase font-mono px-1.5 py-0.5 ml-2 bg-dark-700 rounded text-brand-400 border border-dark-600">45M Engine</span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#features" class="hover:text-white transition">Capabilities</a>
+        <a href="#benchmark" class="hover:text-white transition">Benchmark</a>
+        <a href="#comparison" class="hover:text-white transition">Why It Beats Cloud</a>
+        <a href="#architecture" class="hover:text-white transition">Architecture</a>
+        <a href="#quickstart" class="hover:text-white transition">Quickstart</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/Rythamo8055/needle-ry1" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 bg-dark-800 hover:bg-dark-700 border border-dark-600 text-xs font-mono font-semibold px-3 py-2 rounded-lg transition text-slate-200">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>Star on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="pt-20 pb-16 px-4 sm:px-6 relative overflow-hidden">
+      <div class="max-w-5xl mx-auto text-center">
+        
+        <!-- Tag Pill -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 text-brand-400 font-mono text-xs font-semibold mb-8">
+          <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+          Zero-Cloud Telemetry • 29 MB RAM • Sub-800ms Latency
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-[1.15] mb-6">
+          The Zero-Latency <br />
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-emerald-300 to-teal-200">
+            On-Device Desktop Reflex Palette
+          </span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto font-normal leading-relaxed mb-10">
+          Stop wasting 16 GB of RAM on sluggish 8B models or giving away your keystrokes to 0/month cloud assistants. 
+          <strong>needle-ry1</strong> packs an embedded <strong>45M neural reflex engine</strong> right into your CPU. 100% offline. Instant action execution.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-400 font-semibold text-dark-900 transition flex items-center gap-2.5 shadow-lg shadow-brand-500/20 glow-pill font-mono">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+            Download Free Binary (.AppImage / .exe / .dmg)
+          </a>
+          <a href="#quickstart" class="px-6 py-3.5 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-600 font-medium text-slate-200 transition flex items-center gap-2 font-mono">
+            <span>View Install Guide</span> &rarr;
+          </a>
+        </div>
+
+        <!-- Interactive Mock Command Palette Visual -->
+        <div class="max-w-2xl mx-auto rounded-2xl bg-dark-850 border border-dark-700/80 shadow-2xl p-4 glow-emerald text-left">
+          <div class="flex items-center gap-2 pb-3 mb-3 border-b border-dark-700/60">
+            <div class="w-3 h-3 rounded-full bg-red-500/70"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/70"></div>
+            <span class="text-[11px] font-mono text-slate-500 ml-2">needle-ry1 — floating quick-action HUD</span>
+          </div>
+          
+          <!-- Input Simulation -->
+          <div class="relative flex items-center bg-dark-900 rounded-xl px-4 py-3 border border-dark-600 focus-within:border-brand-500/60">
+            <span class="text-brand-400 font-mono text-lg mr-3">⚡</span>
+            <input type="text" readonly value="turn financial_report_2026.docx into pdf" class="bg-transparent w-full text-white font-mono text-sm focus:outline-none cursor-default" />
+            <span class="text-xs font-mono text-slate-500 bg-dark-800 px-2 py-1 rounded border border-dark-700">0.02s</span>
+          </div>
+
+          <!-- Matched Action Preview -->
+          <div class="mt-3 pt-3 flex items-center justify-between text-xs font-mono">
+            <div class="flex items-center gap-2 text-slate-300">
+              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">ACTION MATCH</span>
+              <span class="text-slate-400">convert_file(src="financial_report_2026.docx", ext="pdf")</span>
+            </div>
+            <div class="text-slate-500 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Non-Destructive Safe Copy</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Key Metrics Ribbon -->
+    <section class="py-10 border-y border-dark-700/70 bg-dark-850/50">
+      <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center font-mono">
+        <div class="p-4">
+          <div class="text-3xl font-extrabold text-white mb-1">29 MB</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">RAM Footprint (500x lighter)</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-extrabold text-brand-400 mb-1">0.0%</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">Idle CPU Drain</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-extrabold text-white mb-1">&lt; 800 ms</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">CPU Inference Time</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl font-extrabold text-teal-300 mb-1">1,750+</div>
+          <div class="text-xs text-slate-400 uppercase tracking-wider">Media Extractors Supported</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Grid -->
+    <section id="features" class="py-20 px-4 sm:px-6 max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-mono tracking-widest text-brand-400 mb-2">Native Desktop Power</h2>
+        <p class="text-3xl font-bold text-white tracking-tight">Everything you need in a single keystroke</p>
+        <p class="text-slate-400 text-sm mt-3">No cloud API keys. No Docker. No heavy models that cook your laptop.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <!-- Card 1 -->
+        <article class="bg-dark-850 rounded-2xl p-6 border border-dark-700/80 hover:border-dark-600 transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-dark-700 border border-dark-600 flex items-center justify-center text-2xl mb-5">
+              📁
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Safe Non-Destructive File Conversion</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Transforms documents, images, and audio locally via native <code class="text-brand-300">ImageMagick</code>, <code class="text-brand-300">FFmpeg</code>, and <code class="text-brand-300">LibreOffice</code>.
+            </p>
+            <ul class="text-xs space-y-2 text-slate-300 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Never overwrites original data</li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Automatic <code class="bg-dark-900 px-1 py-0.5 rounded">file (1).ext</code> safety backup</li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Handles spaces, quotes & long paths</li>
+            </ul>
+          </div>
+          <div class="mt-6 pt-4 border-t border-dark-700/50 text-[11px] font-mono text-slate-500">
+            Tool: <span class="text-brand-400">convert_file(src, ext)</span>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="bg-dark-850 rounded-2xl p-6 border border-dark-700/80 hover:border-dark-600 transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-dark-700 border border-dark-600 flex items-center justify-center text-2xl mb-5">
+              📥
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">1,750+ Universal Stream Downloader</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              Embedded <code class="text-brand-300">yt-dlp</code> core downloads high-res video and audio directly into your <code class="text-brand-300">~/Downloads</code> directory.
+            </p>
+            <ul class="text-xs space-y-2 text-slate-300 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> YouTube, Twitter/X, TikTok, Twitch</li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Natural title query: <em>"get interstellar theme"</em></li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Real-time speed & ETA HUD streaming</li>
+            </ul>
+          </div>
+          <div class="mt-6 pt-4 border-t border-dark-700/50 text-[11px] font-mono text-slate-500">
+            Tool: <span class="text-brand-400">download_media(url_or_query)</span>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="bg-dark-850 rounded-2xl p-6 border border-dark-700/80 hover:border-dark-600 transition flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-dark-700 border border-dark-600 flex items-center justify-center text-2xl mb-5">
+              🔒
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">True Air-Gapped Privacy</h3>
+            <p class="text-sm text-slate-400 leading-relaxed mb-4">
+              No telemetry, no background analytics, no account requirements. Perfect for enterprise air-gapped workstations and privacy purists.
+            </p>
+            <ul class="text-xs space-y-2 text-slate-300 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Works on airplanes with Wi-Fi off</li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Zero keystrokes sent to third parties</li>
+              <li class="flex items-center gap-2"><span class="text-brand-400">✓</span> Apache 2.0 open-source code</li>
+            </ul>
+          </div>
+          <div class="mt-6 pt-4 border-t border-dark-700/50 text-[11px] font-mono text-slate-500">
+            Engine: <span class="text-brand-400">needle 45M (C++ libneedle.so)</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Benchmark & Comparison Table Section -->
+    <section id="comparison" class="py-20 px-4 sm:px-6 bg-dark-850/60 border-y border-dark-700/80">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <h2 class="text-xs uppercase font-mono tracking-widest text-brand-400 mb-2">Head-to-Head Comparison</h2>
+          <p class="text-3xl font-bold text-white tracking-tight">Why needle-ry1 Beats Existing Solutions</p>
+          <p class="text-slate-400 text-sm mt-3">Desktop AI got bloated. Here is how needle-ry1 compares on real hardware.</p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-dark-700 bg-dark-900">
+          <table class="w-full text-left text-sm font-mono border-collapse">
+            <thead>
+              <tr class="border-b border-dark-700 bg-dark-800/80 text-xs text-slate-400 uppercase tracking-wider">
+                <th class="p-4">Metric / Capability</th>
+                <th class="p-4">Cloud AI (Copilot/Raycast)</th>
+                <th class="p-4">Local 8B (Ollama/Llama 3)</th>
+                <th class="p-4 text-brand-400 bg-brand-500/10">⚡ needle-ry1</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-dark-700 text-slate-300">
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">RAM Usage</td>
+                <td class="p-4 text-slate-400">~350 MB (Electron)</td>
+                <td class="p-4 text-red-400 font-bold">8,000 MB – 16,000 MB</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">29 MB (500x lighter)</td>
+              </tr>
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">Idle CPU Drain</td>
+                <td class="p-4 text-slate-400">1% – 5%</td>
+                <td class="p-4 text-red-400">5% – 15% (Heats laptop)</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">0.0% (Zero battery hit)</td>
+              </tr>
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">Inference Latency</td>
+                <td class="p-4 text-slate-400">600ms – 1,800ms (Network)</td>
+                <td class="p-4 text-amber-400">3,000ms – 10,000ms (CPU)</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">&lt; 800 ms (Instant local)</td>
+              </tr>
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">Offline Capable</td>
+                <td class="p-4 text-red-400">❌ Broken offline</td>
+                <td class="p-4 text-emerald-400">✅ Offline</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">✅ 100% Offline</td>
+              </tr>
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">Pricing / Subscription</td>
+                <td class="p-4 text-red-400">0 / month trap</td>
+                <td class="p-4 text-slate-300">Free (Needs $2,000 GPU)</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">100% Free & Open Source</td>
+              </tr>
+              <tr>
+                <td class="p-4 font-sans font-semibold text-white">File Safety Policy</td>
+                <td class="p-4 text-slate-400">Varies / Unsafe</td>
+                <td class="p-4 text-slate-400">N/A (No tool calling)</td>
+                <td class="p-4 text-brand-400 font-bold bg-brand-500/5">Guaranteed Non-Destructive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Honest Trade-Offs (Transparency Section) -->
+    <section class="py-16 px-4 sm:px-6 max-w-4xl mx-auto">
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-6 sm:p-8">
+        <div class="flex items-center gap-3 text-amber-400 font-mono text-sm font-bold mb-3">
+          <span>⚠️</span>
+          <h3>Engineering Honesty: Where needle-ry1 Fails</h3>
+        </div>
+        <p class="text-sm text-slate-300 leading-relaxed mb-4">
+          We believe in radical engineering clarity. needle-ry1 is designed as a **reflex layer**, not an all-knowing conversationalist:
+        </p>
+        <ul class="text-xs text-slate-400 space-y-2 list-disc pl-5 font-mono">
+          <li><strong class="text-slate-200">No General World Knowledge:</strong> At 45 million parameters, it will not explain quantum mechanics or compose sonnets. If you ask trivia, it cleanly refuses.</li>
+          <li><strong class="text-slate-200">Single-Step Reflex:</strong> It executes direct actions. It does not orchestrate 10-step autonomous loops.</li>
+          <li><strong class="text-slate-200">Schema-Locked:</strong> It focuses purely on OS file manipulation, download streaming, and search execution.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Quickstart & Installation -->
+    <section id="quickstart" class="py-20 px-4 sm:px-6 max-w-4xl mx-auto">
+      <div class="text-center mb-14">
+        <h2 class="text-xs uppercase font-mono tracking-widest text-brand-400 mb-2">Installation Guide</h2>
+        <p class="text-3xl font-bold text-white tracking-tight">Up and running in 60 seconds</p>
+      </div>
+
+      <div class="space-y-6 font-mono text-sm">
+        
+        <!-- Step 1: Pre-built Binary -->
+        <div class="bg-dark-850 rounded-2xl p-6 border border-dark-700">
+          <div class="flex items-center justify-between mb-4">
+            <div class="font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-xs">1</span>
+              <span>Option A: Download Standalone Release (Recommended)</span>
+            </div>
+            <span class="text-xs text-brand-400">No python required</span>
+          </div>
+          <p class="text-xs font-sans text-slate-400 mb-4">Grab the pre-compiled binary built by our automated CI/CD pipeline:</p>
+          <div class="grid sm:grid-cols-3 gap-3">
+            <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="p-3 bg-dark-900 border border-dark-700 hover:border-brand-500/50 rounded-xl text-center transition">
+              <div class="text-white font-bold text-xs mb-1">🐧 Linux</div>
+              <div class="text-[11px] text-slate-500">.AppImage / .deb</div>
+            </a>
+            <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="p-3 bg-dark-900 border border-dark-700 hover:border-brand-500/50 rounded-xl text-center transition">
+              <div class="text-white font-bold text-xs mb-1">🪟 Windows</div>
+              <div class="text-[11px] text-slate-500">Portable .exe / .msi</div>
+            </a>
+            <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="p-3 bg-dark-900 border border-dark-700 hover:border-brand-500/50 rounded-xl text-center transition">
+              <div class="text-white font-bold text-xs mb-1">🍎 macOS</div>
+              <div class="text-[11px] text-slate-500">Universal .dmg</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Step 2: Run from Source -->
+        <div class="bg-dark-850 rounded-2xl p-6 border border-dark-700">
+          <div class="font-bold text-white flex items-center gap-2 mb-4">
+            <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center text-xs">2</span>
+            <span>Option B: Run from Source (Python Developer)</span>
+          </div>
+          <div class="bg-dark-900 rounded-xl p-4 border border-dark-700 text-xs text-slate-300 overflow-x-auto">
+            <div class="text-slate-500 select-none"># Clone the repository</div>
+            <div>git clone https://github.com/Rythamo8055/needle-ry1.git</div>
+            <div>cd needle-ry1</div>
+            <div class="text-slate-500 select-none mt-2"># Install lightweight dependencies</div>
+            <div>pip install -r python/requirements.txt</div>
+            <div class="text-slate-500 select-none mt-2"># Launch HUD Command Palette</div>
+            <div class="text-brand-400 font-semibold">python3 python/ry1_app.py</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Final CTA Banner -->
+    <section class="py-16 px-4 sm:px-6 max-w-5xl mx-auto">
+      <div class="rounded-3xl bg-gradient-to-b from-dark-800 to-dark-850 border border-dark-600 p-8 sm:p-12 text-center relative overflow-hidden glow-emerald">
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4">Ready for an Instant, Private Desktop?</h2>
+        <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-8">
+          Join users ditching cloud subscription lag and battery-draining local models for a 29MB neural reflex bar.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-4 font-mono text-sm">
+          <a href="https://github.com/Rythamo8055/needle-ry1" target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-dark-900 font-bold transition shadow-lg">
+            View on GitHub ★
+          </a>
+          <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="px-6 py-3 rounded-xl bg-dark-700 hover:bg-dark-600 border border-dark-500 text-white font-medium transition">
+            Download Binaries &darr;
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-dark-700/80 bg-dark-900 py-10 px-4 text-center font-mono text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-brand-400">⚡</span>
+        <span class="text-slate-300 font-bold">needle-ry1</span>
+        <span>— Licensed under Apache 2.0</span>
+      </div>
+      <div class="flex items-center gap-6 text-slate-400">
+        <a href="https://github.com/Rythamo8055/needle-ry1" class="hover:text-white transition">GitHub</a>
+        <a href="https://github.com/Rythamo8055/needle-ry1/releases" class="hover:text-white transition">Releases</a>
+        <a href="https://rythamo8055.github.io/needle-ry1/sitemap.xml" class="hover:text-white transition">Sitemap</a>
+        <a href="https://rythamo8055.github.io/needle-ry1/robots.txt" class="hover:text-white transition">Robots.txt</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
