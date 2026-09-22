@@ -1,0 +1,40 @@
+[
+  {
+    "name": "convert_file",
+    "description": "Convert, turn, transform, change, or export any file, image, document, video, or audio into another format (e.g., png to jpg, webp to png, docx to pdf, mp4 to mp3, wav to flac).",
+    "parameters": [
+      {
+        "name": "file_name",
+        "type": "string",
+        "description": "The local file name or path to convert"
+      },
+      {
+        "name": "target_format",
+        "type": "string",
+        "description": "The target format or extension (e.g. jpg, png, pdf, mp3, flac)"
+      }
+    ]
+  },
+  {
+    "name": "download_media",
+    "description": "Download video, music, or audio from YouTube or the web. Use for web links (http/https) or when asked to download a song or video by name.",
+    "parameters": [
+      {
+        "name": "url",
+        "type": "string",
+        "description": "The web URL to download, or song/video title to search and download"
+      }
+    ]
+  },
+  {
+    "name": "search_media",
+    "description": "Search, find, play, or look up any song, music artist, video, anime, stream, trailer, or media content on YouTube, Bilibili, or the web. Use when NO direct URL is provided.",
+    "parameters": [
+      {
+        "name": "query",
+        "type": "string",
+        "description": "The search query keywords"
+      }
+    ]
+  }
+]

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ry1</title>
+  <style>
+    :root {
+      --bg: transparent;
+      --card-bg: #09090b;
+      --card-border: #27272a;
+      --border-subtle: #18181b;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --badge-bg: #18181b;
+      --badge-border: #27272a;
+      --item-hover: #18181b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      background: transparent;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Floating Window (shadcn / Raycast Command Palette) */
+    .floating-window {
+      width: 640px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.95),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Window Header / Titlebar */
+    .window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #09090b;
+      border-bottom: 1px solid var(--border-subtle);
+      user-select: none;
+      -webkit-app-region: drag; /* Allows window dragging */
+    }
+
+    .window-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+      -webkit-app-region: no-drag;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #27272a;
+      cursor: pointer;
+    }
+    .dot:hover { background: #3f3f46; }
+
+    /* Search Input Section */
+    .input-section {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .search-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-muted);
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .command-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      color: var(--text-primary);
+      outline: none;
+      letter-spacing: -0.2px;
+    }
+
+    .command-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Results / Intent List */
+    .results-section {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 6px 10px 4px 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .command-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 6px;
+      background: var(--item-hover);
+      border: 1px solid var(--card-border);
+      transition: background 0.1s;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item-icon {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-primary);
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .item-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .item-action {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .item-detail {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--text-secondary);
+    }
+
+    /* Window Footer */
+    .window-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #09090b;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 14px;
+    }
+
+    .kbd-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .kbd {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+
+    /* Status Notification (Minimalist toast inside window) */
+    .status-toast {
+      margin: 8px 8px 0 8px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: none;
+      border: 1px solid var(--card-border);
+      background: #18181b;
+      color: var(--text-primary);
+    }
+
+    /* Progress Bar (Minimalist Monochrome Shadcn) */
+    .progress-container {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #fafafa;
+      border-radius: 2px;
+      transition: width 0.15s ease-out;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-window">
+    
+    <!-- Titlebar -->
+    <div class="window-header">
+      <div class="window-title">
+        <span>ry1</span>
+        <span style="color: var(--text-muted);">/</span>
+        <span style="font-weight: 400;">local assistant</span>
+      </div>
+      <div class="window-dots">
+        <div class="dot" onclick="clearInput()"></div>
+      </div>
+    </div>
+
+    <!-- Input Section -->
+    <div class="input-section">
+      <svg class="search-icon" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        id="cmdInput" 
+        class="command-input" 
+        placeholder="Type a command or paste a link..." 
+        value=""
+        autocomplete="off"
+        spellcheck="false"
+        autofocus
+      />
+    </div>
+
+    <!-- Toast Notification with Live Progress -->
+    <div class="status-toast" id="toast">
+      <div id="toastMessage"></div>
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="progressPercent">0%</span>
+          <span id="progressStats">Starting...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results / Actions Section -->
+    <div class="results-section" id="resultsSection" style="display: none;">
+      <div class="section-label">Detected Action</div>
+      
+      <div class="command-item">
+        <div class="item-left">
+          <svg class="item-icon" id="actionIcon" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <div class="item-texts">
+            <div class="item-action" id="actionName">convert_file</div>
+            <div class="item-detail" id="actionDetail">photo.png &rarr; jpg</div>
+          </div>
+        </div>
+        <div class="badge" id="confBadge">98% confidence</div>
+      </div>
+    </div>
+
+    <!-- Window Footer -->
+    <div class="window-footer">
+      <span id="engineStatus">Needle 45M &bull; On-Device</span>
+      <div class="footer-actions">
+        <div class="kbd-group"><span class="kbd">↵</span> Run</div>
+        <div class="kbd-group"><span class="kbd">Esc</span> Close</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('cmdInput');
+    const resultsSection = document.getElementById('resultsSection');
+    const actionName = document.getElementById('actionName');
+    const actionDetail = document.getElementById('actionDetail');
+    const actionIcon = document.getElementById('actionIcon');
+    const confBadge = document.getElementById('confBadge');
+    const toast = document.getElementById('toast');
+
+    let currentTool = null;
+    let currentArgs = {};
+
+    const ICONS = {
+      file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>',
+      download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>',
+      search: '<circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>',
+      unknown: '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'
+    };
+
+    const hasTauri = window.__TAURI__ && window.__TAURI__.core;
+
+    let debounceTimer = null;
+    let activeRequestId = 0;
+
+    async function handleInput(val) {
+      toast.style.display = 'none';
+      const text = val.trim();
+      
+      // Don't invoke model on empty or very short strings (e.g. 1-2 chars)
+      if (!text || text.length < 3) {
+        resultsSection.style.display = 'none';
+        currentTool = null;
+        currentArgs = {};
+        return;
+      }
+
+      const reqId = ++activeRequestId;
+
+      if (hasTauri) {
+        try {
+          const resp = await window.__TAURI__.core.invoke("ask", { query: text });
+          // If a newer request was dispatched while this was computing, ignore stale response
+          if (reqId !== activeRequestId) return;
+
+          resultsSection.style.display = 'block';
+          if (resp.tool) {
+            currentTool = resp.tool;
+            currentArgs = resp.args;
+            actionName.textContent = resp.tool;
+            actionDetail.textContent = JSON.stringify(resp.args).replace(/[{"}]/g, '').replace(/:/g, ': ');
+            confBadge.textContent = Math.round(resp.confidence * 100) + "% match";
+            actionIcon.innerHTML = resp.tool === 'convert_file' ? ICONS.file : resp.tool === 'download_media' ? ICONS.download : ICONS.search;
+          } else {
+            currentTool = null;
+            currentArgs = {};
+            actionName.textContent = "Unrecognized";
+            actionDetail.textContent = resp.reasoning || "Command not understood";
+            confBadge.textContent = "< 15% (Ignored)";
+            actionIcon.innerHTML = ICONS.unknown;
+          }
+        } catch (e) {
+          console.error("Tauri ask error:", e);
+        }
+      } else {
+        // Fallback simulation in browser
+        resultsSection.style.display = 'block';
+        const lower = text.toLowerCase();
+        if (lower.includes('http://') || lower.includes('https://') || lower.startsWith('download')) {
+          currentTool = "download_media";
+          const match = text.match(/https?:\/\/[^\s]+/);
+          currentArgs = { url: match ? match[0] : text };
+          actionName.textContent = "download_media";
+          actionDetail.textContent = currentArgs.url;
+          actionIcon.innerHTML = ICONS.download;
+          confBadge.textContent = "96% match";
+        } else if (lower.startsWith('convert') || lower.startsWith('turn') || lower.includes(' to ')) {
+          currentTool = "convert_file";
+          currentArgs = { file_name: "file.png", target_format: "jpg" };
+          actionName.textContent = "convert_file";
+          actionDetail.textContent = text.replace(/convert|turn/gi, '').trim();
+          actionIcon.innerHTML = ICONS.file;
+          confBadge.textContent = "92% match";
+        } else if (lower.startsWith('search') || lower.startsWith('find')) {
+          currentTool = "search_media";
+          currentArgs = { query: text.replace(/search|find/gi, '').trim() };
+          actionName.textContent = "search_media";
+          actionDetail.textContent = '"' + currentArgs.query + '"';
+          actionIcon.innerHTML = ICONS.search;
+          confBadge.textContent = "88% match";
+        } else {
+          currentTool = null;
+          actionName.textContent = "Unrecognized";
+          actionDetail.textContent = "Command not understood";
+          actionIcon.innerHTML = ICONS.unknown;
+          confBadge.textContent = "< 15% (Ignored)";
+        }
+      }
+    }
+
+    // 350ms debounce ensures model only runs when user pauses typing
+    input.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => handleInput(e.target.value), 350);
+    });
+
+    input.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter') {
+        clearTimeout(debounceTimer);
+        const text = input.value.trim();
+        if (!text) return;
+
+        // If not already resolved, trigger immediate resolution
+        if (!currentTool && text.length >= 3) {
+          await handleInput(text);
+        }
+
+        if (!currentTool || actionName.textContent === "Unrecognized") return;
+
+        const toastMsg = document.getElementById('toastMessage');
+        const progContainer = document.getElementById('progressContainer');
+        const progFill = document.getElementById('progressFill');
+        const progPercent = document.getElementById('progressPercent');
+        const progStats = document.getElementById('progressStats');
+
+        toast.style.display = 'block';
+        toastMsg.textContent = '⚡ Executing ' + currentTool + '...';
+
+        if (currentTool === 'download_media') {
+          progContainer.style.display = 'flex';
+          progFill.style.width = '0%';
+          progPercent.textContent = '0%';
+          progStats.textContent = 'Connecting...';
+        } else {
+          progContainer.style.display = 'none';
+        }
+
+        if (hasTauri) {
+          try {
+            const out = await window.__TAURI__.core.invoke("execute_tool", { tool: currentTool, args: currentArgs });
+            progContainer.style.display = 'none';
+            toastMsg.textContent = "✓ " + out;
+          } catch (err) {
+            progContainer.style.display = 'none';
+            toastMsg.textContent = "Error: " + err;
+          }
+        } else {
+          setTimeout(() => {
+            progContainer.style.display = 'none';
+            toastMsg.textContent = "✓ Done: Executed in 32ms";
+          }, 400);
+        }
+      } else if (e.key === 'Escape') {
+        clearInput();
+      }
+    });
+
+    // Real-time download progress hook called from backend
+    window.updateDownloadProgress = function(percentStr, speedStr, etaStr) {
+      const progContainer = document.getElementById('progressContainer');
+      const progFill = document.getElementById('progressFill');
+      const progPercent = document.getElementById('progressPercent');
+      const progStats = document.getElementById('progressStats');
+      const toastMsg = document.getElementById('toastMessage');
+
+      toast.style.display = 'block';
+      progContainer.style.display = 'flex';
+      toastMsg.textContent = '⚡ Downloading media...';
+
+      let cleanPercent = parseFloat(percentStr) || 0;
+      if (cleanPercent > 100) cleanPercent = 100;
+      progFill.style.width = cleanPercent + '%';
+      progPercent.textContent = Math.round(cleanPercent) + '%';
+      progStats.textContent = (speedStr || '') + ' · ETA ' + (etaStr || '');
+    };
+
+    function clearInput() {
+      clearTimeout(debounceTimer);
+      activeRequestId++;
+      input.value = "";
+      resultsSection.style.display = 'none';
+      toast.style.display = 'none';
+      const progContainer = document.getElementById('progressContainer');
+      if (progContainer) progContainer.style.display = 'none';
+      currentTool = null;
+      currentArgs = {};
+      input.focus();
+    }
+  </script>
+</body>
+</html>

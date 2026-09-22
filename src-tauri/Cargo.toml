@@ -1,0 +1,28 @@
+[package]
+name = "ry1"
+version = "0.1.0"
+description = "ry1 — Local Intelligence System"
+authors = ["ry1"]
+edition = "2021"
+
+[lib]
+name = "ry1_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+libloading = "0.8"
+libdbus-sys = { version = "0.2", features = ["vendored"] }
+once_cell = "1"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
