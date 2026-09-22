@@ -201,29 +201,107 @@
           <img src="brand-banner.jpg" alt="needle-ry1 precision engineering desktop command palette interface banner" class="w-full h-auto object-cover" />
         </div>
 
-        <!-- Interactive HUD Preview -->
-        <div class="max-w-2xl mx-auto rounded-xl bg-surface-900 border border-surface-700 p-4 text-left shadow-lg">
+        <!-- Interactive Live Simulation Playground -->
+        <div class="max-w-2xl mx-auto rounded-xl bg-surface-900 border border-surface-700 p-5 text-left shadow-lg">
           <div class="flex items-center justify-between pb-3 mb-3 border-b border-surface-800 text-xs font-mono text-slate-400">
             <div class="flex items-center gap-2">
               <svg class="w-3.5 h-3.5 text-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              <span>ry1 floating command bar</span>
+              <span class="text-slate-200 font-medium">Interactive Palette Simulator</span>
             </div>
-            <span class="text-[11px] text-slate-400">Local Latency: &lt; 20ms</span>
+            <span id="sim-latency" class="text-[11px] text-accent-400 font-medium">18ms response</span>
           </div>
 
-          <div class="flex items-center gap-3 py-2 text-slate-100 font-mono text-xs sm:text-sm border-b border-surface-800">
+          <!-- Clickable Sample Prompts -->
+          <div class="flex flex-wrap items-center gap-2 mb-3 text-[11px] font-mono">
+            <span class="text-slate-400">Try prompt:</span>
+            <button type="button" onclick="runSim('convert')" class="px-2.5 py-1 rounded bg-surface-800 hover:bg-surface-700 border border-surface-600 text-slate-200 transition">File Convert</button>
+            <button type="button" onclick="runSim('download')" class="px-2.5 py-1 rounded bg-surface-800 hover:bg-surface-700 border border-surface-600 text-slate-200 transition">Media Download</button>
+            <button type="button" onclick="runSim('search')" class="px-2.5 py-1 rounded bg-surface-800 hover:bg-surface-700 border border-surface-600 text-slate-200 transition">Media Search</button>
+            <button type="button" onclick="runSim('trivia')" class="px-2.5 py-1 rounded bg-surface-800 hover:bg-surface-700 border border-surface-600 text-amber-300 transition">Trivia (Refusal)</button>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="flex items-center gap-3 py-2 text-slate-100 font-mono text-xs sm:text-sm border-b border-surface-800 bg-surface-950 px-3 rounded-lg border border-surface-800">
             <svg class="w-4 h-4 text-accent-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-            <span class="text-white font-medium">turn financial_report_2026.docx into pdf</span>
+            <input id="sim-input" type="text" value="turn financial_report_2026.docx into pdf" oninput="handleSimInput(this.value)" class="bg-transparent w-full text-white font-mono text-xs sm:text-sm focus:outline-none" placeholder="Type a command..." />
           </div>
 
-          <div class="mt-3 pt-3 border-t border-surface-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-300">
+          <!-- Output Details -->
+          <div class="mt-3 pt-3 border-t border-surface-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded bg-surface-800 text-accent-400 border border-surface-700 font-medium text-[11px]">RESOLVED ACTION</span>
-              <span class="text-slate-300">convert_file(src=&quot;financial_report_2026.docx&quot;, ext=&quot;pdf&quot;)</span>
+              <span id="sim-badge" class="px-2 py-0.5 rounded bg-surface-800 text-accent-400 border border-surface-700 font-medium text-[11px]">RESOLVED ACTION</span>
+              <span id="sim-output" class="text-slate-200">convert_file(src="financial_report_2026.docx", ext="pdf")</span>
             </div>
-            <span class="text-[11px] text-slate-400">Policy: Non-Destructive Copy</span>
+            <span id="sim-policy" class="text-[11px] text-slate-400">Policy: Non-Destructive Copy</span>
           </div>
         </div>
+
+        <!-- Script for Simulator -->
+        <script>
+          const simData = {
+            convert: {
+              input: 'turn financial_report_2026.docx into pdf',
+              badge: 'RESOLVED ACTION',
+              output: 'convert_file(src="financial_report_2026.docx", ext="pdf")',
+              policy: 'Policy: Non-Destructive Copy',
+              latency: '18ms response',
+              badgeColor: 'text-accent-400'
+            },
+            download: {
+              input: 'download song named interstellar theme from youtube',
+              badge: 'RESOLVED ACTION',
+              output: 'download_media(query="interstellar theme")',
+              policy: 'Target: ~/Downloads/ with live ETA',
+              latency: '21ms response',
+              badgeColor: 'text-accent-400'
+            },
+            search: {
+              input: 'search youtube for best rust tutorials 2026',
+              badge: 'RESOLVED ACTION',
+              output: 'search_media(query="best rust tutorials 2026")',
+              policy: 'Action: Launches default web browser',
+              latency: '14ms response',
+              badgeColor: 'text-accent-400'
+            },
+            trivia: {
+              input: 'who won the 2022 world cup and explain why',
+              badge: 'INTENT REFUSED',
+              output: 'null (Model rejects non-tool queries)',
+              policy: 'Scope: 45M reflex model has no world knowledge',
+              latency: '9ms response',
+              badgeColor: 'text-amber-400'
+            }
+          };
+
+          function runSim(type) {
+            const data = simData[type];
+            if (!data) return;
+            document.getElementById('sim-input').value = data.input;
+            updateSim(data);
+          }
+
+          function handleSimInput(val) {
+            val = val.toLowerCase();
+            if (val.includes('convert') || val.includes('.docx') || val.includes('.png') || val.includes('.jpg') || val.includes('pdf')) {
+              updateSim(simData.convert);
+            } else if (val.includes('download') || val.includes('http') || val.includes('song')) {
+              updateSim(simData.download);
+            } else if (val.includes('search') || val.includes('find')) {
+              updateSim(simData.search);
+            } else {
+              updateSim(simData.trivia);
+            }
+          }
+
+          function updateSim(data) {
+            const badge = document.getElementById('sim-badge');
+            badge.innerText = data.badge;
+            badge.className = 'px-2 py-0.5 rounded bg-surface-800 border border-surface-700 font-medium text-[11px] ' + data.badgeColor;
+            document.getElementById('sim-output').innerText = data.output;
+            document.getElementById('sim-policy').innerText = data.policy;
+            document.getElementById('sim-latency').innerText = data.latency;
+          }
+        </script>
 
       </div>
     </section>
@@ -433,6 +511,58 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- Frequently Asked Questions (SEO & Customer Conversion) -->
+    <section class="py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-surface-800">
+      <div class="text-center mb-12">
+        <h2 style="font-size: 1.85rem; line-height: 1.25;" class="font-heading font-bold text-white mb-2">Frequently Asked Questions</h2>
+        <p class="text-slate-400 text-sm">Common architectural and deployment questions.</p>
+      </div>
+
+      <div class="space-y-4 text-sm font-sans">
+        
+        <details class="bg-surface-900 rounded-xl border border-surface-800 p-5 group transition">
+          <summary class="font-heading font-semibold text-white cursor-pointer list-none flex items-center justify-between">
+            <span>How does needle-ry1 run in 29 MB RAM without an 8B model?</span>
+            <span class="text-accent-400 text-xs font-mono group-open:rotate-180 transition">&darr;</span>
+          </summary>
+          <p class="mt-3 text-xs text-slate-300 font-mono leading-relaxed border-t border-surface-800 pt-3">
+            Instead of loading large weights that consume 8 GB to 16 GB of memory, needle-ry1 uses a specialized 45M neural reflex model (). It runs strictly on your CPU using quantized weights to perform intent classification and schema parameter extraction in under 20ms.
+          </p>
+        </details>
+
+        <details class="bg-surface-900 rounded-xl border border-surface-800 p-5 group transition">
+          <summary class="font-heading font-semibold text-white cursor-pointer list-none flex items-center justify-between">
+            <span>Does needle-ry1 ever send queries to the cloud?</span>
+            <span class="text-accent-400 text-xs font-mono group-open:rotate-180 transition">&darr;</span>
+          </summary>
+          <p class="mt-3 text-xs text-slate-300 font-mono leading-relaxed border-t border-surface-800 pt-3">
+            Never. The model inference runs locally inside the application binary via C-FFI. No cloud servers, telemetry endpoints, or analytics services are contacted when you type or execute a tool.
+          </p>
+        </details>
+
+        <details class="bg-surface-900 rounded-xl border border-surface-800 p-5 group transition">
+          <summary class="font-heading font-semibold text-white cursor-pointer list-none flex items-center justify-between">
+            <span>How does the file conversion tool protect against data loss?</span>
+            <span class="text-accent-400 text-xs font-mono group-open:rotate-180 transition">&darr;</span>
+          </summary>
+          <p class="mt-3 text-xs text-slate-300 font-mono leading-relaxed border-t border-surface-800 pt-3">
+             strictly enforces a non-destructive file policy. Original input files are never overwritten or deleted. If an output file with the same name already exists in the destination folder, the tool automatically appends an incremental number (e.g. ).
+          </p>
+        </details>
+
+        <details class="bg-surface-900 rounded-xl border border-surface-800 p-5 group transition">
+          <summary class="font-heading font-semibold text-white cursor-pointer list-none flex items-center justify-between">
+            <span>What happens when I enter a prompt that isn't a supported tool?</span>
+            <span class="text-accent-400 text-xs font-mono group-open:rotate-180 transition">&darr;</span>
+          </summary>
+          <p class="mt-3 text-xs text-slate-300 font-mono leading-relaxed border-t border-surface-800 pt-3">
+            Because the 45M model is a targeted reflex engine rather than a general conversation model, queries outside the schema (such as general knowledge trivia, poetry, or coding requests) are cleanly rejected with zero tool execution rather than returning an invalid hallucination.
+          </p>
+        </details>
+
       </div>
     </section>
 
